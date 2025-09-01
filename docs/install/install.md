@@ -175,6 +175,44 @@ wget http://bastion-host:8080/agent.x86_64.iso
 
 If for some reason this solution will not work, you can install [httpd](httpd.md) and serve from there. 
 
+You can also copy it somewhere else from where the BMC has better access. Here's an example using scp.
+```
+scp user@192.168.122.187:~/ocp/install/agent.x86_64.iso ~/iso/
+```
+
 ## Install the Cluster
 
+When all the hosts are booted, wait for the bootstrap to complete. 
+
+```shell
+openshift-install agent wait-for bootstrap-complete --dir=install
+```
+
+When the bootstrap is complete, wait for the install to complete. 
+```shell
+openshift-install agent wait-for install-complete --dir=install
+```
+
+At the end of the process, you will be presented with the URL for the cluster endpoint, along with the kubeadmin credentials. They are also available in the install folder at `~/ocp/install` as files `kubeadmin-password` and `kubeconfig`
+
+Open the URL presented and log in. Wait until all checks are green before proceeding. 
+
 ## Validate the Install
+
+Login to the Cluster
+
+```shell
+oc login --server=https://api.cluster.basedomain.com:6443 -u kubeadmin -p <password>
+```
+
+Test Connectivity
+```shell
+oc debug node/<worker-node-name> -- chroot /host \
+  podman pull registry.redhat.io/ubi9/ubi:latest
+```
+
+Cleanup the leftover install and configuration pods
+```shell
+oc delete pods --all-namespaces --field-selector=status.phase=Succeeded
+oc delete pods --all-namespaces --field-selector=status.phase=Failed
+```
