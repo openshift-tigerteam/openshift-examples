@@ -2,6 +2,9 @@ site_name: OpenShift Examples
 site_url: https://openshift-tiger-team.github.io/openshift-examples
 theme:
   name: material
+  logo: images/ocp.png
+  font:
+    text: Red Hat Text
   palette:
     scheme: slate
     primary: custom
