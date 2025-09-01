@@ -1,6 +1,6 @@
-## Building the Bastion Host
-
 The bastion host serves multiple purposes. First, all of our install work is done here. Second, it's used to validate the environment prior to installation. Third, it provides additional tools for installation such as a web server environment for the ISO images. 
+
+### Install the OS
 
 * Download [Red Hat Enterprise Linux 9.x Binary DVD](https://access.redhat.com/downloads/content/rhel)
 * Boot host from ISO and perform install as `Server with GUI`

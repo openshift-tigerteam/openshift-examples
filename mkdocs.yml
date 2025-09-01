@@ -16,9 +16,9 @@ nav:
   - Install: install/install.md
   - Networking: networking/networking.md
 extra_css:
-  - css/extra.css
+  - extra/extra.css
 extra_javascript:
-  - js/extra.js
+  - extra/extra.js
 plugins:
   - include-markdown
   - macros
