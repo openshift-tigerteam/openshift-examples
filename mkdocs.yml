@@ -16,6 +16,7 @@ nav:
   - Install: install/install.md
   - Post-Install: postinstall/postinstall.md
   - Networking: networking/networking.md
+  - Virtualization: virtualization/index.md
 extra_css:
   - extra/extra.css
 extra_javascript:
