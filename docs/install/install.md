@@ -125,7 +125,6 @@ dig +noall +answer @<nameserver_ip> test.apps.<cluster_name>.<base_domain>
 | openshift-worker-3.poc.ocp.basedomain.com         | 10.1.0.23    | IP for w3          |
 
 ## Build the Bastion Host
-
 {% include-markdown "install/bastion.md" %}
 
 ## Create the Configurations
@@ -133,7 +132,48 @@ dig +noall +answer @<nameserver_ip> test.apps.<cluster_name>.<base_domain>
 
 ## Generate the ISO
 
+From the `~/ocp` directory, you can now create the agent iso. We create an install directory and copy the yaml files into the directory because the image creation process consumes and **destroys** the configuration files. We want to keep a copy in case the process needs to be repeated.
+
+Here's an example script. I would recommend creating a small file named `create-iso.sh` in the `ocp` working directory with the contents. Don't forget to `chmod +x create-iso.sh`
+
+```shell
+#!/bin/bash
+rm -rf install
+mkdir install
+cp -r install-config.yaml agent-config.yaml install
+openshift-install agent create image --dir=install
+```
+
+> You can always add `--log-level=debug` to any `openshift-install` commands for more output. 
+
+This is going to generate an `agent.x86_64.iso` file in the install directory which should be located at `~/ocp/install`. 
+
 ## Boot the Machines
+
+The best way to to provide the ISO as an HTTP source if you are using a BMC like iLo or iDRAC. Not doing so could result in issues during the install due to network contention using the web interfaces of those tools. 
+
+Luckily, on the bastion host, we already have podman installed so we can just use that to serve. 
+
+```shell
+podman run -d --name iso-http \
+  -p 8080:80 \
+  -v ~/ocp/install/agent.x86_64.iso:/usr/share/nginx/html/agent.x86_64.iso:Z \
+  docker.io/library/nginx:alpine
+```
+
+Don't forget to open the host firewall on the bastion.   
+```shell
+# open TCP/8080 permanently and reload firewalld
+sudo firewall-cmd --permanent --add-port=8080/tcp
+sudo firewall-cmd --reload
+```
+
+Test it
+```shell
+wget http://bastion-host:8080/agent.x86_64.iso
+```
+
+If for some reason this solution will not work, you can install [httpd](httpd.md) and serve from there. 
 
 ## Install the Cluster
 
