@@ -14,6 +14,7 @@ theme:
 nav:
   - Home: index.md
   - Install: install/install.md
+  - Post-Install: postinstall/postinstall.md
   - Networking: networking/networking.md
 extra_css:
   - extra/extra.css
