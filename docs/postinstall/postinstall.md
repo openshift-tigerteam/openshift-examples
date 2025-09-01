@@ -27,3 +27,7 @@ Install the Operators
   * Kube Descheduler Operator
 * Configure Registry
 * Cert-manager Operator for Red Hat OpenShift
+
+## Optional
+
+[Rotate SSH Keys](rotate-ssh-keys.md)
