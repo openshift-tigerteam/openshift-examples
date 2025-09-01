@@ -7,3 +7,11 @@
 .md-nav__title {
   display: none !important;
 }
+
+.md-typeset details {
+  border-color: var(--md-primary-fg-color);
+}
+
+.md-typeset summary::before {
+  background-color: var(--md-primary-fg-color) !important;
+}

@@ -1,8 +1,8 @@
 # OpenShift Examples
 
-## Install
+## [Install](install/install.md)
 
-## Post Install
+Prework, Example install configs, etc. 
 
 ## [Networking](networking/networking.md)
 
