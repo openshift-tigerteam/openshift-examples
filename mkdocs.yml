@@ -1,0 +1,16 @@
+site_name: OpenShift Examples
+site_url: https://openshift-tiger-team.github.io/openshift-examples
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: custom
+  features:
+    - navigation.instant
+nav:
+  - Home: index.md
+  - Networking: networking/networking.md
+extra_css:
+  - css/extra.css
+plugins:
+  - include-markdown
