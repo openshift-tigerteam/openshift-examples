@@ -50,6 +50,12 @@ Download to ~/.pull-secret
 ssh-keygen -t ed25519 -f ~/.ssh/ocp_ed25519
 ```
 
+### Open Port 8080 for iso-http
+```shell
+sudo firewall-cmd --permanent --add-port=8080/tcp
+sudo firewall-cmd --reload
+```
+
 ### Tools for Environment Validation 
 
 ```shell

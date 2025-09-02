@@ -12,12 +12,12 @@ source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
+
 Start mkdocs.   
 ```shell
+source .venv/bin/activate
 mkdocs serve    
 ```
-
-
 
 ## Project Creation
 ```shell

@@ -2,21 +2,9 @@
 
 These install documents are focused on on-premise installations on bare metal. There are other install methods. If you can use the [Assisted Installer](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html-single/installing_on-premise_with_assisted_installer/index#using-the-assisted-installer_installing-on-prem-assisted), do so. 
 
-You will also need an entitled Red Hat account. 
+You will need an entitled [Red Hat](https://www.redhat.com/wapps/ugc/register.html?_flowId=register-flow&_flowExecutionKey=e1s1) account. 
 
 Please read the entire page prior to starting. 
-
-## Steps
-
-* Acquire the Hardware
-* Gather the Information
-* Update the Network
-* Build the Bastion Host
-* Create the Configurations
-* Generate the ISO
-* Boot the Machines
-* Install the Cluster
-* Validate the Install
 
 ## Acquire the Hardware
 {% include-markdown "install/baremetal_hardware.md" %}
@@ -26,18 +14,20 @@ Please read the entire page prior to starting.
 ### Cluster Values
 Below are the values an enterprise typically has to gather or create for installing OpenShift.
 
-|                               | Example Value             | Description                                                                       |
-| ---                           | ---                       | ---                                                                               |
-| **Cluster Name**              | poc                       | Name of the cluster                                                               |
-| **Base Domain**               | ocp.basedomain.com        | Name of the domain                                                                |
-| **Machine Subnet**            | 10.1.0.0/24 (vlan - 123)  | Subnet and vlan for all machines/VIPs in cluster (can be much smaller)            |
-| **Pod Subnet**                | 10.128.0.0/14             | Subnet for pod SDN                                                                |
-| **Pod Subnet - Host Prefix**  | 23                        | Host prefix for Subnet for pod SDN                                                |
-| **Service Subnet**            | 172.30.0.0/16             | Subnet for service SDN                                                            |
-| **API VIP**                   | 10.1.0.9                  | VIP for the MetalLB API Endpoint. **This must be inside the machine subnet**      |
-| **Ingress VIP**               | 10.1.0.10                 | VIP for the MetalLB Ingress Endpoint. **This must be inside the machine subnet**  |
-| **DNS**                       | dns1.basedomain.com,etc   | IP or hostname for the DNS hosts                                                  |
-| **NTP**                       | ntp.basedomain.com,etc    | IP or hostname for the NTP hosts                                                  |
+|                               | Example Value             | Description                                       |
+| ---                           | ---                       | ---                                               |
+| **Cluster Name**              | poc                       | Name of the cluster                               |
+| **Base Domain**               | ocp.basedomain.com        | Name of the domain                                |
+| **Machine Subnet**            | 10.1.0.0/24 (vlan - 123)  | Subnet and vlan for all machines/VIPs in cluster  |
+| **Pod Subnet**                | 10.128.0.0/14             | Subnet for pod SDN                                |
+| **Pod Subnet - Host Prefix**  | 23                        | Host prefix for Subnet for pod SDN                |
+| **Service Subnet**            | 172.30.0.0/16             | Subnet for service SDN                            |
+| **API VIP**                   | 10.1.0.9                  | VIP for the MetalLB API Endpoint *                |
+| **Ingress VIP**               | 10.1.0.10                 | VIP for the MetalLB Ingress Endpoint *            |
+| **DNS**                       | dns1.basedomain.com,etc   | IP or hostname for the DNS hosts                  |
+| **NTP**                       | ntp.basedomain.com,etc    | IP or hostname for the NTP hosts                  |
+
+* VIPs must be within the machine subnet
 
 #### SDN Subnet Overlaps
 
@@ -45,7 +35,7 @@ The Pod Subnet and Service Subnet are run in the software defined network (SDN) 
 
 #### Pod Subnet and Host Prefix Explanation
 
-The pod subnet in this example is huge. If we are just doing a small cluster, think like 500 pods per node. 6 nodes with 500 pods is 3000 ips. You could use a `/20` and then each node would have a `/23` for a total of 8 nodes. ex. 10.128.0.0/20 with hostPrefix: 23. 
+If we are just doing a small cluster, think 500 pods per node and 6 nodes is 3000 ips. You could use a `/20` and then each node would have a `/23`. `10.128.0.0/20` with `hostPrefix: 23`. 
 
 ```
 10.128.0.0/23    (10.128.0.0 – 10.128.1.255)
@@ -81,16 +71,29 @@ Typically, machines will have more than one NIC and these will be setup in a bon
 | openshift-worker-3        | eno1      | A0-B1-C2-D3-E4-F5 | 10.1.0.23 | /dev/sda  |
 |                           | eno2      | A0-B1-C2-D3-E4-F6 |           |
 
-The IPs in the example table represent a bonded IP or if the cluster does not use bonding, that IP that connects the machine to the machine network. Notice all machine IPs are inside of the machine subnet of 10.1.0.0/24. 
+The IPs in the example table represent a bonded IP or if the cluster does not use bonding, that IP that connects the machine to the machine network. Notice all machine IPs are inside of the machine subnet of 10.1.0.0/24 defined above. 
+
+On modern RHEL (RHEL CoreOS included), the names of your NICs aren’t the old eth0, eth1 style anymore. They use predictable network interface names, which are generated at boot based on hardware topology and firmware information. Here’s the gist of how RHEL decides what your NICs will be called:
+
+* eno1, eno2 → onboard NICs (from BIOS/firmware)
+* ens1f0, ens1f1 → PCI Express slots (“s” = slot, “f” = function)
+* enp3s0 → PCI bus location (p3 = bus 3, s0 = slot 0)
+* enx<MAC> → if nothing else matches, fall back to the MAC address
+
+So the name is tied to where the NIC is physically, not just “first one detected.” If you don't know what they will be, boot one of the boxes with a [RHEL ISO](https://access.redhat.com/downloads/content/rhel) and find out.  
+
+> Note: If you are using a hostname scheme that uses an integer at the end of the name, you should start with 1, not zero. But if you start with zero and you want it to match up with your ending IP, be consistent. 
 
 ## Update the Network
 ### Firewall and Networking Requirements
 
 Prior to the install, you must open the firewall to connect to Red Hat's servers and ports between the machines.
 
-* [Configuring Firewall](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/installation_configuration/configuring-firewall#configuring-firewall_configuring-firewall)
+* [Configuring Firewall *](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/installation_configuration/configuring-firewall#configuring-firewall_configuring-firewall)
 * [Network Connectivity Requirements](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html-single/installing_on_bare_metal/index#installation-network-connectivity-user-infra_installing-bare-metal)
 * [Ensuring required ports are open](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html-single/installing_on_bare_metal/index#network-requirements-ensuring-required-ports-are-open_ipi-install-prerequisites)
+
+> * If you are using third-party software from a particular external repository, you will need to provide access to that as well. It is recommended to provide access to docker.io
 
 ### Create DNS Entries
 
@@ -156,27 +159,22 @@ Luckily, on the bastion host, we already have podman installed so we can just us
 
 ```shell
 podman run -d --name iso-http \
-  -p 8080:80 \
-  -v ~/ocp/install/agent.x86_64.iso:/usr/share/nginx/html/agent.x86_64.iso:Z \
-  docker.io/library/nginx:alpine
+  -p 8080:8080 \
+  -v ~/ocp/install/agent.x86_64.iso:/var/www/html/agent.x86_64.iso:Z \
+  registry.redhat.io/rhel9/httpd-24:9.6
 ```
 
-Don't forget to open the host firewall on the bastion.   
+Test retrieving the iso using the following command. 
 ```shell
-# open TCP/8080 permanently and reload firewalld
-sudo firewall-cmd --permanent --add-port=8080/tcp
-sudo firewall-cmd --reload
+wget http://bastionhostname:8080/agent.x86_64.iso
 ```
 
-Test it
-```shell
-wget http://bastion-host:8080/agent.x86_64.iso
-```
+> Don't forget to [open the host firewall](bastion.md#open-port-8080-for-iso-http) on the bastion.   
 
 If for some reason this solution will not work, you can install [httpd](httpd.md) and serve from there. 
 
 You can also copy it somewhere else from where the BMC has better access. Here's an example using scp.
-```
+```shell
 scp user@192.168.122.187:~/ocp/install/agent.x86_64.iso ~/iso/
 ```
 
