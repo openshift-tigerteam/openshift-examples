@@ -139,3 +139,5 @@ hosts:
 > Notice the inconsistent labels and spellings.  
 >   * `macAddress` in the interfaces stanza, but `mac-address` in the networkConfig stanza.    
 >   * `additionalNtpSources` is used here, but it's `additionalNTPServers` in the `install-config.yaml`
+
+[Docs: Sample Config Bonds Vlans](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/installing_an_on-premise_cluster_with_the_agent-based_installer/preparing-to-install-with-agent-based-installer#agent-install-sample-config-bonds-vlans_preparing-to-install-with-agent-based-installer)

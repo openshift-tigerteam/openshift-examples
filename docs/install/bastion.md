@@ -3,13 +3,13 @@ The bastion host serves multiple purposes. First, all of our install work is don
 ### Install the OS
 
 * Download [Red Hat Enterprise Linux 9.x Binary DVD](https://access.redhat.com/downloads/content/rhel)
-* Boot host from ISO and perform install as `Server with GUI`
+* Boot host from ISO and [perform install](rhel_install.md) as `Server with GUI`
 * Make sure to enable SSH for user
 * Reboot and SSH into bastion host as administrative user
 
 ### Register the Host
 
-To be able to install necessary packages, you need to register the host with your Red Hat ID and password.   
+To be able to install necessary packages, you need to register the host with your Red Hat ID and password. You could have also accomplished this during the RHEL install. 
 ```shell
 sudo subscription-manager register # Enter username/password
 sudo subscription-manager repos --enable=rhel-9-for-x86_64-baseos-rpms
