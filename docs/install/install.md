@@ -149,7 +149,7 @@ openshift-install agent create image --dir=install
 
 > You can always add `--log-level=debug` to any `openshift-install` commands for more output. 
 
-This is going to generate an `agent.x86_64.iso` file in the install directory which should be located at `~/ocp/install`. 
+This is going to generate an `agent.x86_64.iso` file in the install directory which should be located at `~/ocp/install`. Remember, everything in the `install` directory has been excluded from the git repository. 
 
 ## Boot the Machines
 
