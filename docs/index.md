@@ -15,3 +15,9 @@ Examples of `NodeNetworkConfigurationPolicy` and `ClusterUserDefinedNetwork`
 ## [Virtualization](virtualization/index.md)
 
 Examples for OpenShift Virtualization
+
+## [Notes](notes/notes.md)
+
+Assorted notes for OpenShift install and configuration
+
+[Base64 and MachineConfig](notes/notes.md#creating-a-machine-configuration-file)
