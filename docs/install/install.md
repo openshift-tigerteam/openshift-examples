@@ -4,7 +4,7 @@ These install documents are focused on on-premise installations on bare metal. T
 
 You will need an entitled [Red Hat](https://www.redhat.com/wapps/ugc/register.html?_flowId=register-flow&_flowExecutionKey=e1s1) account. 
 
-Please read the entire page prior to starting. 
+Please read the entire page prior to starting. It is also recommended to acquire a git repository. 
 
 ## Acquire the Hardware
 {% include-markdown "install/baremetal_hardware.md" %}

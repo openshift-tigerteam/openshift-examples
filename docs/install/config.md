@@ -9,12 +9,17 @@ The `install-config.yaml` contains all the cluster level information while the `
 
 ### Create the Working Directory
 
-You are going to want to create a working directory. 
+You are going to want to create a working directory and initialize it into a git repository. 
 
 ```shell 
 mkdir -p ocp && cd ocp
+git init 
+echo "install/" > .gitignore
+echo "# POC install notes" > notes.md
 touch install-config.yaml
 touch agent-config.yaml
+git add -A
+git commit -m "repo initialized"
 ```
 
 ### Create the Install Config
