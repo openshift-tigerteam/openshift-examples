@@ -17,6 +17,7 @@ nav:
   - Post-Install: postinstall/postinstall.md
   - Networking: networking/networking.md
   - Virtualization: virtualization/index.md
+  - Storage: storage/storage.md
   - Notes: notes/notes.md
 extra_css:
   - extra/extra.css

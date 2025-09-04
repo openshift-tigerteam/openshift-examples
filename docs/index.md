@@ -16,6 +16,10 @@ Examples of `NodeNetworkConfigurationPolicy` and `ClusterUserDefinedNetwork`
 
 Examples for OpenShift Virtualization
 
+## [Storage](storage/storage.md)
+
+Examples for CSI providers for OpenShift
+
 ## [Notes](notes/notes.md)
 
 Assorted notes for OpenShift install and configuration
