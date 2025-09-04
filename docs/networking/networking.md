@@ -65,18 +65,18 @@ OVN-K = Open Virtual Networking - Kubernetes (OpenShift's CNI)
 - name: bond<i>
   type: bond
   state: up
-    link-aggregation:
-      mode: active-backup
-      port:
-        - <devicename>
-        - <devicename2>
-      options:
-        miimon: '100'
-        primary: <devicename>
-    ipv4:
-      enabled: false
-    ipv6:
-      enabled: false
+  link-aggregation:
+    mode: 802.3ad
+    port:
+      - <devicename>
+      - <devicename2>
+    options:
+      miimon: "100"
+      lacp_rate: fast
+  ipv4:
+    enabled: false
+  ipv6:
+    enabled: false
 ```
 #### VLAN
 *What it is:* A logical sub-interface identified by a VLAN ID, created on top of a NIC or bond.  
