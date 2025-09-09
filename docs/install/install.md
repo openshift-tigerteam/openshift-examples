@@ -89,11 +89,17 @@ So the name is tied to where the NIC is physically, not just “first one detect
 
 Prior to the install, you must open the firewall to connect to Red Hat's servers and ports between the machines.
 
-* [Configuring Firewall *](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/installation_configuration/configuring-firewall#configuring-firewall_configuring-firewall)
+* [Configuring Firewall (note below)](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/installation_configuration/configuring-firewall#configuring-firewall_configuring-firewall)
 * [Network Connectivity Requirements](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html-single/installing_on_bare_metal/index#installation-network-connectivity-user-infra_installing-bare-metal)
 * [Ensuring required ports are open](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html-single/installing_on_bare_metal/index#network-requirements-ensuring-required-ports-are-open_ipi-install-prerequisites)
 
-> * If you are using third-party software from a particular external repository, you will need to provide access to that as well. It is recommended to provide access to docker.io
+> Note: If you are using third-party software from a particular external repository, you will need to provide access to that as well. It is recommended to provide access to docker.io. 
+
+#### MITM Proxy and Self-Signed Certificates
+If you are using a MITM proxy which is doing TLS inspection, the Red Hat CDN for `dnf install` or `yum install` uses cdn.redhat.com which has a self-signed certificate. If your MITM proxy automatically blocks self-signed certificates, you will need to whitelist cdn.redhat.com.
+
+It is recommended that all entries for the firewall as detailed above are also allowed through any TLS inspection processes. 
+
 
 ### Create DNS Entries
 
