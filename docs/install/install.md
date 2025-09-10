@@ -18,6 +18,7 @@ Below are the values an enterprise typically has to gather or create for install
 | ---                           | ---                       | ---                                               |
 | **Cluster Name**              | poc                       | Name of the cluster                               |
 | **Base Domain**               | ocp.basedomain.com        | Name of the domain                                |
+| **Cluster Suffix**            | poc.ocp.basedomain.com    | cluster name + base domain, for easier notation   |
 | **Machine Subnet**            | 10.1.0.0/24 (vlan - 123)  | Subnet and vlan for all machines/VIPs in cluster  |
 | **Pod Subnet**                | 10.128.0.0/14             | Subnet for pod SDN                                |
 | **Pod Subnet - Host Prefix**  | 23                        | Host prefix for Subnet for pod SDN                |
@@ -103,19 +104,19 @@ It is recommended that all entries for the firewall as detailed above are also a
 
 ### Create DNS Entries
 
-Create the following A records in your DNS based on the values from above. 
+Create the following A records in your DNS bases on the values from above. 
 
-| A Record                          | IP Address  | Description                         | 
-| ---                               | ---         | ---                                 |
-| api.poc.ocp.basedomain.com        | 10.1.0.9    | Virtual IP for the API endpoint     |
-| api-int.poc.ocp.basedomain.com    | 10.1.0.9    | Virtual IP for the API endpoint     |
-| *.apps.poc.ocp.basedomain.com     | 10.1.0.10   | Virtual IP for the ingress endpoint |
+| A Record                          | IP Address  | Description                             | 
+| ---                               | ---         | ---                                     |
+| `api.<cluster_suffix>`            | 10.1.0.9    | Virtual IP  (VIP) for the API endpoint  |
+| `api-int.<cluster_suffix>`        | 10.1.0.9    | Internal VIP for the API endpoint       |
+| `*.apps.<cluster_suffix>`         | 10.1.0.10   | Virtual IP for the ingress endpoint     |
 
 You can validate the DNS using dig
 
 ```shell
-dig +noall +answer @<nameserver_ip> api.<cluster_name>.<base_domain>
-dig +noall +answer @<nameserver_ip> test.apps.<cluster_name>.<base_domain>
+dig +noall +answer @<dns> api.<cluster_suffix>
+dig +noall +answer @<dns> test.apps.<cluster_suffix>
 ```
 
 > [DNS requirements](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html-single/installing_on_bare_metal/index#network-requirements-dns_ipi-install-prerequisites)  
@@ -123,15 +124,15 @@ dig +noall +answer @<nameserver_ip> test.apps.<cluster_name>.<base_domain>
 
 #### Optional Helpful DNS Entries
 
-| A Record                                          | IP Address  | Description         | 
-| ---                                               | ---         | ---                 |
-| bastion.poc.ocp.basedomain.com                    | 10.1.0.4    | IP for the bastion  |
-| openshift-control-plane-1.poc.ocp.basedomain.com  | 10.1.0.11    | IP for cp1         |
-| openshift-control-plane-2.poc.ocp.basedomain.com  | 10.1.0.12    | IP for cp2         |
-| openshift-control-plane-3.poc.ocp.basedomain.com  | 10.1.0.13    | IP for cp3         |
-| openshift-worker-1.poc.ocp.basedomain.com         | 10.1.0.21    | IP for w1          |
-| openshift-worker-2.poc.ocp.basedomain.com         | 10.1.0.22    | IP for w2          |
-| openshift-worker-3.poc.ocp.basedomain.com         | 10.1.0.23    | IP for w3          |
+| A Record                                      | IP Address  | Description         | 
+| ---                                           | ---         | ---                 |
+| `bastion.<cluster_suffix>`                    | 10.1.0.4    | IP for the bastion  |
+| `openshift-control-plane-1.<cluster_suffix>`  | 10.1.0.11   | IP for cp1          |
+| `openshift-control-plane-2.<cluster_suffix>`  | 10.1.0.12   | IP for cp2          |
+| `openshift-control-plane-3.<cluster_suffix>`  | 10.1.0.13   | IP for cp3          |
+| `openshift-worker-1.<cluster_suffix>`         | 10.1.0.21   | IP for w1           |
+| `openshift-worker-2.<cluster_suffix>`         | 10.1.0.22   | IP for w2           |
+| `openshift-worker-3.<cluster_suffix>`         | 10.1.0.23   | IP for w3           |
 
 ## Build the Bastion Host
 {% include-markdown "install/bastion.md" %}
