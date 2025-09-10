@@ -1,0 +1,58 @@
+hosts: 
+  - hostname: openshift-worker-x            # hostname
+    role: worker                            # master/worker
+    rootDeviceHints:
+      deviceName: "/dev/sda"                # Disk Hint
+    interfaces:
+      - name: eno1                          # Interface Name 1
+        macAddress: A1:B2:3C:4D:1E:11       # Mac Address 1
+      - name: eno2                          # Interface Name 2
+        macAddress: A1:B2:3C:4D:2E:11       # Mac Address 2
+    networkConfig:
+      interfaces:
+        - name: eno1                        # Interface Name 1
+          type: ethernet
+          state: up
+          mac-address: A1:B2:3C:4D:1E:11    # Mac Address 1
+          ipv4:
+            enabled: false
+          ipv6:
+            enabled: false
+        - name: eno2                        # Interface Name 2
+          type: ethernet
+          state: up
+          mac-address: A1:B2:3C:4D:2E:11    # Mac Address 2
+          ipv4:
+            enabled: false
+          ipv6:
+            enabled: false
+        - name: bond0
+          type: bond
+          state: up
+          ipv4:
+            enabled: true
+            address:
+              - ip: 10.1.0.11               # Host IP inside the machine subnet
+                prefix-length: 24
+            dhcp: false
+          link-aggregation:
+            mode: 802.3ad                   # LACP
+            port:
+              - eno1
+              - eno2
+            options:
+              miimon: "100"
+              lacp_rate: fast
+          ipv6:
+            enabled: false
+      dns-resolver:
+        config:
+          server:
+            - dns1.basedomain.com           # DNS 1
+            - dns2.basedomain.com           # DNS 2
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 10.1.0.1
+            next-hop-interface: bond0
+            table-id: 254
