@@ -30,5 +30,5 @@ Install the Operators:
 
 ## Optional
 
-[Add Worker Node](add-worker-node.md)
-[Rotate SSH Keys](rotate-ssh-keys.md)
+* [Add Worker Node](add-worker-node.md)  
+* [Rotate SSH Keys](rotate-ssh-keys.md)
