@@ -8,7 +8,7 @@ This guide describes the steps to add a new worker node to an existing OpenShift
 
 ### Create the YAML configuration file
 
-Create a file named `nodes-config.yaml` with the following content. Modify the values to match your environment.
+Create a file named `nodes-config.yaml` with the following content. Modify the values to match your environment. This shuld look very familiar as it is similar to the install-config.yaml file used during installation. If you are readding a node to an existing cluster, you can copy the install-config.yaml file and modify it as needed.
 
 ```yaml
 hosts:
@@ -32,6 +32,14 @@ hosts:
          dhcp: false
 ```
 > [YAML file parameters](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html-single/nodes/index#adding-node-iso-yaml-config_adding-node-iso)
+
+<details>
+<summary>nodes-config.yaml with bond0</summary>
+<p>This example includes two nics and a bond.</p>
+```yaml
+{% include-markdown "postinstall/nodes-config-bond.yaml" %}
+```
+</details>
 
 ### Create the ISO image
 
