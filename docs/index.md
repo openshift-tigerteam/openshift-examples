@@ -25,3 +25,4 @@ Examples for CSI providers for OpenShift
 Assorted notes for OpenShift install and configuration
 
 [Base64 and MachineConfig](notes/notes.md#creating-a-machine-configuration-file)
+[ACM on SNO](acm/acm-sno.md)
