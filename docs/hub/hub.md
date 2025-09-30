@@ -199,6 +199,9 @@ oc create secret generic worker-0-bmc-secret \
 ```
 
 ```shell
+echo -n "admin" | base64
+echo -n "your-bmc-password" | base64  
+
 cat <<EOF | oc apply -f -
 apiVersion: v1
 kind: Secret
