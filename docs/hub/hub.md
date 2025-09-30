@@ -11,7 +11,7 @@
 
 These examples are in leiu of existing storage. 
 
-### Install Operators
+### Install Storage Operators
 * LVM Storage Operator
 * Openshift Data Foundation (ODF) Operator  
 
@@ -20,7 +20,7 @@ Label the node as a storage node
 oc label node <node-name> cluster.ocs.openshift.io/openshift-storage=
 ```
 
-### LVM Storage
+### Create LVM Storage
 
 Below is an example. Change out the path for your data disk. 
 ```shell
@@ -48,7 +48,7 @@ spec:
 EOF
 ```
 
-### ODF StorageCluster for ObjectStorage
+### Create ODF StorageCluster for ObjectStorage
 
 We are using ODF only for the ObjectStorage
 ```shell
@@ -83,7 +83,7 @@ spec:
 EOF
 ```
 
-## MultiClusterObservability
+## Install MultiClusterObservability
 
 * Storage is installed (above)
 
@@ -158,10 +158,10 @@ spec:
     storeStorageSize: 10Gi
 ```
 
-# Install ACM
+## Install ACM
 * Install Advanced Cluster Management Operator
 
-## Adding Host Investory via Redfish
+### Adding Host Investory via Redfish
 
 * Advanced Cluster Management for Kubernetes is installed
 * Bare Metal Operator is installed
