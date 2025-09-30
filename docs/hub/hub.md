@@ -134,7 +134,8 @@ stringData:
 EOF
 ```
 
-```yaml
+```shell
+cat <<EOF | oc apply -f -
 apiVersion: observability.open-cluster-management.io/v1beta2
 kind: MultiClusterObservability
 metadata:
@@ -156,16 +157,60 @@ spec:
     ruleStorageSize: 1Gi
     storageClass: lvms-local-storage
     storeStorageSize: 10Gi
+EOF
 ```
 
 ## Install ACM
 * Install Advanced Cluster Management Operator
+
+### Create InfraEnv
+
+```shell
+cat <<EOF | oc apply -f -
+apiVersion: agent-install.openshift.io/v1beta1
+kind: InfraEnv
+metadata:
+  name: my-infraenv
+  namespace: <your-namespace>
+spec:
+  pullSecretRef:
+    name: pull-secret
+  sshAuthorizedKey: <your-ssh-public-key>
+  clusterRef:
+    name: <cluster-name>
+    namespace: <your-namespace>
+  nmStateConfigLabelSelector:
+    matchLabels:
+      infraenvs.agent-install.openshift.io: my-infraenv
+EOF
+```
 
 ### Adding Host Investory via Redfish
 
 * Advanced Cluster Management for Kubernetes is installed
 * Bare Metal Operator is installed
 * Redfish credentials are available for the target host
+
+```shell
+oc create secret generic worker-0-bmc-secret \
+  --from-literal=username=admin \
+  --from-literal=password=your-bmc-password \
+  -n <your-namespace>
+```
+
+```shell
+cat <<EOF | oc apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: worker-0-bmc-secret
+  namespace: <your-namespace>
+type: Opaque
+data:
+  username: <base64-encoded-username>
+  password: <base64-encoded-password>
+EOF
+```
 
 
 ```yaml
