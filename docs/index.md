@@ -20,9 +20,12 @@ Examples for OpenShift Virtualization
 
 Examples for CSI providers for OpenShift
 
+## [Hub Cluster](hub/hub.md)
+
+Building a Hub cluster with SNO + ACM
+
 ## [Notes](notes/notes.md)
 
 Assorted notes for OpenShift install and configuration
 
 [Base64 and MachineConfig](notes/notes.md#creating-a-machine-configuration-file)  
-[ACM on SNO](acm/acm-sno.md)

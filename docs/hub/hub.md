@@ -1,36 +1,58 @@
-# ACM SNO
+# Creating the Hub Cluster
 
-## Storage
+## Hardware Requirements
+* Single box. Recommend 24 cores, 64 GB RAM and two disks - os disk 120 GB, data disk 2TB
+* Can be bare metal or virtualized. No OpenShift Virtualization here. 
 
-### Prerequisites
+## Install SNO
+* Highly recommend assisted installer for this. 
+
+## Install Storage
+
+These examples are in leiu of existing storage. 
+
+### Install Operators
 * LVM Storage Operator
-* Openshift Data Foundation (ODF) Operator
+* Openshift Data Foundation (ODF) Operator  
+
+Label the node as a storage node  
+```shell
+oc label node <node-name> cluster.ocs.openshift.io/openshift-storage=
+```
 
 ### LVM Storage
-```yaml
+
+Below is an example. Change out the path for your data disk. 
+```shell
+cat <<EOF | oc apply -f -
 apiVersion: lvm.topolvm.io/v1alpha1
 kind: LVMCluster
-  name: local-storage-lvmcluster
+metadata:
+  name: local-storage-lvm-cluster
   namespace: openshift-storage
 spec:
   storage:
     deviceClasses:
-      - default: true
+      - name: local-storage
+        default: true
+        fstype: xfs
         deviceSelector:
           paths:
             - /dev/nvme0n1
-        fstype: xfs
-        name: local-storage
         thinPoolConfig:
+          name: thin-pool-1
+          sizePercent: 90
+          overprovisionRatio: 10
           chunkSizeCalculationPolicy: Static
           metadataSizeCalculationPolicy: Host
-          name: thin-pool-1
-          overprovisionRatio: 10
-          sizePercent: 90
+EOF
 ```
 
 ### ODF StorageCluster for ObjectStorage
-```yaml
+
+We are using ODF only for the ObjectStorage
+```shell
+cat <<EOF | oc apply -f -
 apiVersion: ocs.openshift.io/v1
 kind: StorageCluster
 metadata:
@@ -58,9 +80,10 @@ spec:
     dbStorageClassName: lvms-local-storage
     reconcileStrategy: standalone
   resourceProfile: balanced
+EOF
 ```
 
-## Observability
+## MultiClusterObservability
 
 * Storage is installed (above)
 
@@ -74,6 +97,7 @@ oc create secret generic multiclusterhub-operator-pull-secret \
 ```
 
 ```yaml
+cat <<EOF | oc apply -f -
 apiVersion: objectbucket.io/v1alpha1
 kind: ObjectBucketClaim
 metadata:
@@ -82,6 +106,7 @@ metadata:
 spec:
   bucketName: thanos-object-storage-bucket
   storageClassName: openshift-storage.noobaa.io
+EOF
 ```
 
 ```shell
@@ -131,4 +156,31 @@ spec:
     ruleStorageSize: 1Gi
     storageClass: lvms-local-storage
     storeStorageSize: 10Gi
+```
+
+# Install ACM
+* Install Advanced Cluster Management Operator
+
+## Adding Host Investory via Redfish
+
+* Advanced Cluster Management for Kubernetes is installed
+* Bare Metal Operator is installed
+* Redfish credentials are available for the target host
+
+
+```yaml
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: host-one
+  namespace: openshift-machine-api
+spec:
+  online: false
+  bootMACAddress: "aa:bb:cc:dd:ee:ff"
+  bmc:
+    address: redfish-protocol://<BMC-IP-address>/redfish/v1/
+    credentialsName: "host-one-bmc-secret"
+  hardwareProfile: "default"
+  rootDeviceHints:
+    hctl: "0:0:0:0"
 ```
