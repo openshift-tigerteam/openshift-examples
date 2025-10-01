@@ -163,6 +163,18 @@ EOF
 ## Install ACM
 * Install Advanced Cluster Management Operator
 
+Add Provisioning
+
+```yaml
+apiVersion: metal3.io/v1alpha1
+kind: Provisioning
+metadata:
+  name: provisioning-configuration
+spec:
+  provisioningNetwork: "Disabled"
+  watchAllNamespaces: true
+```
+
 ### Create InfraEnv
 
 ```shell
@@ -193,10 +205,10 @@ EOF
 * Redfish credentials are available for the target host
 
 ```shell
-oc create secret generic worker-0-bmc-secret \
+oc create secret generic <hostname>-bmc-secret \
   --from-literal=username=admin \
   --from-literal=password=your-bmc-password \
-  -n <your-clusters-namespace>
+  -n <InfraEnv-namespace>
 ```
 
 ```shell
@@ -207,8 +219,8 @@ cat <<EOF | oc apply -f -
 apiVersion: v1
 kind: Secret
 metadata:
-  name: worker-0-bmc-secret
-  namespace: <your-clusters-namespace>
+  name: <hostname>-bmc-secret
+  namespace: <InfraEnv-namespace>
 type: Opaque
 data:
   username: <base64-encoded-username>
@@ -220,12 +232,14 @@ EOF
 apiVersion: metal3.io/v1alpha1
 kind: BareMetalHost
 metadata:
-  name: worker-0
-  namespace: <your-clusters-namespace>
+  name: <hostname>-bmh
+  namespace: <InfraEnv-namespace>
+  labels:
+    infraenvs.agent-install.openshift.io: InfraEnv-namespace
 spec:
   bmc:
-    address: redfish-virtualmedia://<BMC-IP-address>/redfish/v1/
-    credentialsName: "worker-0-bmc-secret"
+    address: redfish-virtualmedia://<bmc-ip>/redfish/v1/
+    credentialsName: "<hostname>-bmc-secret"
     disableCertificateVerification: true
   bootMACAddress: "aa:bb:cc:dd:ee:ff"
   online: false
