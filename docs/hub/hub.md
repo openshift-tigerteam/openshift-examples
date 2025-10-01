@@ -170,22 +170,23 @@ cat <<EOF | oc apply -f -
 apiVersion: agent-install.openshift.io/v1beta1
 kind: InfraEnv
 metadata:
-  name: my-infraenv
-  namespace: <your-namespace>
+  name: lab
+  namespace: lab
 spec:
-  pullSecretRef:
-    name: pull-secret
-  sshAuthorizedKey: <your-ssh-public-key>
-  clusterRef:
-    name: <cluster-name>
-    namespace: <your-namespace>
+  agentLabels:
+    agentclusterinstalls.extensions.hive.openshift.io/location: ktown
+  cpuArchitecture: x86_64
+  ipxeScriptType: DiscoveryImageAlways
   nmStateConfigLabelSelector:
     matchLabels:
-      infraenvs.agent-install.openshift.io: my-infraenv
+      infraenvs.agent-install.openshift.io: lab
+  pullSecretRef:
+    name: pullsecret-lab
+  sshAuthorizedKey: <public-key>
 EOF
 ```
 
-### Adding Host Investory via Redfish
+### Adding Host Inventory via Redfish
 
 * Advanced Cluster Management for Kubernetes is installed
 * Bare Metal Operator is installed
@@ -195,7 +196,7 @@ EOF
 oc create secret generic worker-0-bmc-secret \
   --from-literal=username=admin \
   --from-literal=password=your-bmc-password \
-  -n <your-namespace>
+  -n <your-clusters-namespace>
 ```
 
 ```shell
@@ -207,7 +208,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: worker-0-bmc-secret
-  namespace: <your-namespace>
+  namespace: <your-clusters-namespace>
 type: Opaque
 data:
   username: <base64-encoded-username>
@@ -215,20 +216,17 @@ data:
 EOF
 ```
 
-
 ```yaml
 apiVersion: metal3.io/v1alpha1
 kind: BareMetalHost
 metadata:
-  name: host-one
-  namespace: openshift-machine-api
+  name: worker-0
+  namespace: <your-clusters-namespace>
 spec:
-  online: false
-  bootMACAddress: "aa:bb:cc:dd:ee:ff"
   bmc:
-    address: redfish-protocol://<BMC-IP-address>/redfish/v1/
-    credentialsName: "host-one-bmc-secret"
-  hardwareProfile: "default"
-  rootDeviceHints:
-    hctl: "0:0:0:0"
+    address: redfish-virtualmedia://<BMC-IP-address>/redfish/v1/
+    credentialsName: "worker-0-bmc-secret"
+    disableCertificateVerification: true
+  bootMACAddress: "aa:bb:cc:dd:ee:ff"
+  online: false
 ```
