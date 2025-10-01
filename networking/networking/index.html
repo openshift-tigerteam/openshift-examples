@@ -1,0 +1,1292 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://openshift-tiger-team.github.io/openshift-examples/networking/networking/">
+      
+      
+        <link rel="prev" href="../../postinstall/postinstall/">
+      
+      
+        <link rel="next" href="../../virtualization/">
+      
+      
+      <link rel="icon" href="../../images/favicon_io/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Networking - OpenShift Examples</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Red+Hat+Text:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Red Hat Text";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../extra/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#networking" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="OpenShift Examples" class="md-header__button md-logo" aria-label="OpenShift Examples" data-md-component="logo">
+      
+  <img src="../../images/ocp.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OpenShift Examples
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Networking
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="OpenShift Examples" class="md-nav__button md-logo" aria-label="OpenShift Examples" data-md-component="logo">
+      
+  <img src="../../images/ocp.png" alt="logo">
+
+    </a>
+    OpenShift Examples
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../install/install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Install
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../postinstall/postinstall/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Post-Install
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Networking
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Networking
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typical-openshift-production-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Typical OpenShift Production Setup
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-full-stack-for-underlay-networking" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Full Stack for Underlay Networking
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Full Stack for Underlay Networking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#descriptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Descriptions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Descriptions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#switch-physical-layer-2-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      Switch (Physical Layer 2 device)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ethernet-nic-inside-the-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ethernet (NIC inside the node)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bond-linux-bonding-or-lacp" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bond (Linux bonding or LACP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vlan" class="md-nav__link">
+    <span class="md-ellipsis">
+      VLAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ovs-bridge-open-vswitch-kernel-module-daemon" class="md-nav__link">
+    <span class="md-ellipsis">
+      OVS Bridge (Open vSwitch kernel module + daemon)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ovn-bridge-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      OVN Bridge Mapping
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#localnet-ovn-construct" class="md-nav__link">
+    <span class="md-ellipsis">
+      Localnet (OVN construct)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-user-defined-network-cudn" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster User Defined Network (CUDN)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-attachment-definitions-nads" class="md-nav__link">
+    <span class="md-ellipsis">
+      Network Attachment Definitions (NADs)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#virtual-ethernet-pair-veth" class="md-nav__link">
+    <span class="md-ellipsis">
+      Virtual Ethernet Pair (veth)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pod-kubernetes-abstraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pod (Kubernetes abstraction)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodenetworkconfigurationpolicy-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      NodeNetworkConfigurationPolicy Examples
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clusteruserdefinednetwork" class="md-nav__link">
+    <span class="md-ellipsis">
+      ClusterUserDefinedNetwork
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../virtualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Virtualization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../storage/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Storage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Notes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typical-openshift-production-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Typical OpenShift Production Setup
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-full-stack-for-underlay-networking" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Full Stack for Underlay Networking
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Full Stack for Underlay Networking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#descriptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Descriptions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Descriptions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#switch-physical-layer-2-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      Switch (Physical Layer 2 device)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ethernet-nic-inside-the-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ethernet (NIC inside the node)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bond-linux-bonding-or-lacp" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bond (Linux bonding or LACP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vlan" class="md-nav__link">
+    <span class="md-ellipsis">
+      VLAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ovs-bridge-open-vswitch-kernel-module-daemon" class="md-nav__link">
+    <span class="md-ellipsis">
+      OVS Bridge (Open vSwitch kernel module + daemon)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ovn-bridge-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      OVN Bridge Mapping
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#localnet-ovn-construct" class="md-nav__link">
+    <span class="md-ellipsis">
+      Localnet (OVN construct)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-user-defined-network-cudn" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster User Defined Network (CUDN)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-attachment-definitions-nads" class="md-nav__link">
+    <span class="md-ellipsis">
+      Network Attachment Definitions (NADs)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#virtual-ethernet-pair-veth" class="md-nav__link">
+    <span class="md-ellipsis">
+      Virtual Ethernet Pair (veth)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pod-kubernetes-abstraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pod (Kubernetes abstraction)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodenetworkconfigurationpolicy-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      NodeNetworkConfigurationPolicy Examples
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clusteruserdefinednetwork" class="md-nav__link">
+    <span class="md-ellipsis">
+      ClusterUserDefinedNetwork
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="networking">Networking</h1>
+<h2 id="overview">Overview</h2>
+<p>From a linux configuration perspective, remember that: </p>
+<ul>
+<li>There are physical connections (<code>type: ethernet</code>)</li>
+<li>Those can be bonded (bond)<ul>
+<li>Bonds have a mode of <code>802.3ad</code> (LACP), <code>balance-xor</code>, or <code>active-backup</code>. </li>
+</ul>
+</li>
+<li>Vlans can have a <code>base-iface</code> of an existing <code>ethernet</code> or <code>bond</code><ul>
+<li>You can have multiple vlans from a trunked <code>base-iface</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="typical-openshift-production-setup">Typical OpenShift Production Setup</h3>
+<ul>
+<li>7 NICs</li>
+<li>3 Bonds - LACP<ul>
+<li>bond0 - management bond for cluster traffic</li>
+<li>bond1 - data bond for pod network</li>
+<li>bond2 - storage network</li>
+</ul>
+</li>
+<li>1 BMC interface</li>
+</ul>
+<h2 id="the-full-stack-for-underlay-networking">The Full Stack for Underlay Networking</h2>
+<p>NNCP = NodeNetworkConfigurationPolicy
+OVN-K = Open Virtual Networking - Kubernetes (OpenShift's CNI)</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Where</th>
+<th>Managed By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Switch</td>
+<td>Physical</td>
+<td>Switch</td>
+</tr>
+<tr>
+<td>Ethernet</td>
+<td>Linux</td>
+<td>NNCP</td>
+</tr>
+<tr>
+<td>Bond</td>
+<td>Linux</td>
+<td>NNCP</td>
+</tr>
+<tr>
+<td>OVS Bridge</td>
+<td>Linux</td>
+<td>NNCP</td>
+</tr>
+<tr>
+<td>OVN Bridge Mapping</td>
+<td>OVN-K</td>
+<td>NNCP</td>
+</tr>
+<tr>
+<td>Localnet</td>
+<td>OVN-K</td>
+<td>NNCP</td>
+</tr>
+<tr>
+<td>Cluster User Defined Network (CUDN)</td>
+<td>OVN-K</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Network Attachment Definition</td>
+<td>OVN-K</td>
+<td>CUDN</td>
+</tr>
+<tr>
+<td>Virtual Ethernet Pair</td>
+<td>Kubernetes</td>
+<td>CNI</td>
+</tr>
+</tbody>
+</table>
+<h3 id="descriptions">Descriptions</h3>
+<h4 id="switch-physical-layer-2-device">Switch (Physical Layer 2 device)</h4>
+<p><em>What it is:</em> The physical top-of-rack or in-rack switch (Arista, MikroTik, Juniper, etc.).  <br />
+<em>Role in OpenShift:</em> Provides the L2 domain where your cluster nodes attach. VLAN tags, trunks, and port-channels live here. <br />
+<em>Implementation:</em> It’s actual silicon forwarding Ethernet frames. OVN doesn’t know or care about it directly, but VLANs and MTU mismatches will break your cluster if misaligned.   </p>
+<h4 id="ethernet-nic-inside-the-node">Ethernet (NIC inside the node)</h4>
+<p><em>What it is:</em> The real network interface card (NIC) in the node. Could be Intel, Mellanox, Solarflare, etc. <br />
+<em>Implementation:</em> In linux, shows up as eno1, ens3f0, etc. Uses a kernel driver (ixgbe, mlx5_core, sfc). <br />
+<em>In OpenShift:</em> The base network device that NodeNetworkConfigurationPolicy (NNCP) manipulates.  </p>
+<pre><code class="language-yaml">- name: &lt;devicename&gt;
+  type: ethernet
+  state: up
+  mac-address: &lt;macaddress&gt;
+  ipv4:
+    enabled: false
+  ipv6:
+    enabled: false
+</code></pre>
+<h4 id="bond-linux-bonding-or-lacp">Bond (Linux bonding or LACP)</h4>
+<p><em>What it is:</em> A logical link aggregation across multiple physical NICs.<br />
+<em>Implementation:</em> Linux kernel bonding driver (bonding.ko). Supports modes active-backup, 802.3ad (LACP), balance-xor.<br />
+<em>In OpenShift:</em> Configured by the SR-IOV or NMState operators. Exposed in NNCP YAML (type: bond, link-aggregation:).</p>
+<pre><code class="language-yaml">- name: bond&lt;i&gt;
+  type: bond
+  state: up
+  link-aggregation:
+    mode: 802.3ad
+    port:
+      - &lt;devicename&gt;
+      - &lt;devicename2&gt;
+    options:
+      miimon: &quot;100&quot;
+      lacp_rate: fast
+  ipv4:
+    enabled: false
+  ipv6:
+    enabled: false
+</code></pre>
+<h4 id="vlan">VLAN</h4>
+<p><em>What it is:</em> A logical sub-interface identified by a VLAN ID, created on top of a NIC or bond.<br />
+<em>Role in OpenShift:</em> Segments traffic into isolated broadcast domains, allowing pods or nodes to connect to different L2 networks over the same physical link.<br />
+<em>Implementation:</em> Linux kernel 8021q module creates sub-interfaces (e.g., bond0.31 for VLAN 31). Configured via NNCP or NetworkManager. VLAN tags are inserted/removed by the kernel before frames leave/arrive on the NIC.  </p>
+<pre><code class="language-yaml">- name: bond&lt;i&gt;.&lt;vlanid&gt;
+  type: vlan
+  state: up
+  vlan:
+    base-iface: bond&lt;i&gt;
+    id: &lt;vlanid&gt;
+  ipv4:
+    enabled: true
+    address:
+      - ip: &lt;ipaddress&gt;               
+        prefix-length: &lt;prefixlength&gt; # 24
+    dhcp: false
+  ipv6:
+    enabled: false
+</code></pre>
+<h4 id="ovs-bridge-open-vswitch-kernel-module-daemon">OVS Bridge (Open vSwitch kernel module + daemon)</h4>
+<p><em>What it is:</em> A software switch running in each node.<br />
+<em>Implementation:</em> Kernel datapath + ovs-vswitchd in userspace. Can do VLAN tagging, port mirroring, QoS.<br />
+<em>In OpenShift:</em> OVN-Kubernetes uses an OVS bridge (br-int) for pod connectivity. If you’re doing localnet or external connectivity, OVS bridges handle the attachment to physical NICs or bonds.  </p>
+<pre><code class="language-yaml">- name: ovs-bridge-trunk
+  type: ovs-bridge
+  state: up
+  bridge:
+    port:
+      - name: bond1
+    allow-extra-patch-ports: true
+    options:
+      stp: false # DO NOT ENABLE STP unless you know what you are doing!
+</code></pre>
+<h4 id="ovn-bridge-mapping">OVN Bridge Mapping</h4>
+<p><em>What it is:</em> A mapping between a logical OVN bridge port and a real OVS bridge/port on the node.<br />
+<em>Implementation:</em> Managed by the ovn-kubernetes daemonset (ovn-controller). Stored in OVSDB.<br />
+<em>Example:</em> bridge-mappings=physnet1:br-ex tells OVN that traffic for physnet1 is reachable via the host’s br-ex bridge. </p>
+<pre><code class="language-yaml">desiredState:
+  ovn:
+    bridge-mappings:
+      - localnet: localnet-bridge-trunk
+        bridge: ovs-bridge-trunk
+        state: present
+</code></pre>
+<h4 id="localnet-ovn-construct">Localnet (OVN construct)</h4>
+<p><em>What it is:</em> A special OVN logical switch port type that maps a logical network directly to a physical network.<br />
+<em>Implementation:</em> In OVN NB DB as type=localnet. Bypasses overlay tunnels (Geneve) and uses VLAN-backed segments.<br />
+<em>In OpenShift:</em> Used for Cluster User Defined Networks (CUDN) with type: Localnet so pods connect to a real VLAN instead of overlay.  </p>
+<h4 id="cluster-user-defined-network-cudn">Cluster User Defined Network (CUDN)</h4>
+<p><em>What it is:</em> An OpenShift CRD (ClusterNetwork) that defines extra networks beyond the default pod network.<br />
+<em>Implementation:</em> Managed by the Network Operator → writes into OVN NB DB. Can be Geneve overlay or Localnet VLAN-backed.<br />
+<em>In practice:</em> This is how you say “I want a storage network on VLAN 31, isolated from the default pod net.” </p>
+<pre><code class="language-yaml">apiVersion: k8s.ovn.org/v1
+kind: ClusterUserDefinedNetwork
+metadata:
+ name: vlan&lt;vlanid&gt;
+spec:
+  namespaceSelector:
+    matchExpressions:
+      - key: kubernetes.io/metadata.name
+        operator: In
+        values: [&quot;&lt;namespace&gt;&quot;, &quot;&lt;namespace2&gt;&quot;] 
+  network:
+    topology: Localnet
+    localnet:
+      role: Secondary
+      physicalNetworkName: localnet-bridge-trunk
+      vlan:
+        mode: Access
+        access:
+          id: &lt;vlanid&gt;
+      ipam:
+        mode: Disabled
+</code></pre>
+<h4 id="network-attachment-definitions-nads">Network Attachment Definitions (NADs)</h4>
+<p><em>What it is:</em> A Kubernetes CRD (network-attachment-definitions.k8s.cni.cncf.io) provided by Multus.<br />
+<em>Implementation:</em> NAD describes which CNI plugin (OVN, SR-IOV, macvlan, whereabouts) to call when attaching extra networks to a pod. <br />
+<em>In OpenShift:</em> Each NAD corresponds to a net-attach-def object. Pods reference them via k8s.v1.cni.cncf.io/networks.  </p>
+<pre><code class="language-yaml">apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: vlan&lt;vlanid&gt;
+  namespace: &lt;namespace&gt;
+  ownerReferences:
+    - apiVersion: k8s.ovn.org/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ClusterUserDefinedNetwork
+      name: vlan&lt;vlanid&gt;
+spec:
+  config: '
+    {
+      &quot;cniVersion&quot;:&quot;1.0.0&quot;,
+      &quot;mtu&quot;:1500,
+      &quot;name&quot;:&quot;cluster_udn_vlan&lt;vlanid&gt;&quot;,
+      &quot;netAttachDefName&quot;:&quot;&lt;namespace&gt;/vlan&lt;vlanid&gt;&quot;,
+      &quot;physicalNetworkName&quot;:&quot;localnet-bridge-trunk&quot;,
+      &quot;role&quot;:&quot;secondary&quot;,
+      &quot;topology&quot;:&quot;localnet&quot;,
+      &quot;type&quot;:&quot;ovn-k8s-cni-overlay&quot;,
+      &quot;vlanID&quot;:&lt;vlanid&gt;
+    }'
+</code></pre>
+<h4 id="virtual-ethernet-pair-veth">Virtual Ethernet Pair (veth)</h4>
+<p><em>What it is:</em> The plumbing pipe.<br />
+<em>Implementation:</em> Linux kernel primitive (ip link add veth0 type veth peer name veth1).<br />
+<em>In OpenShift:</em> When a pod is created, Multus/OVN creates a veth pair. One end goes into the pod’s netns (eth0). The other end plugs into br-int (OVS) or another bridge. OVN programs flows to steer traffic between veth, tunnels, and physical NICs.  </p>
+<h4 id="pod-kubernetes-abstraction">Pod (Kubernetes abstraction)</h4>
+<p><em>What it is:</em> A Linux process in a container namespace.
+<em>Networking view:</em> Sees its veth eth0, a private IP, and the routes injected by the CNI plugin.
+<em>In OpenShift:</em> The pod doesn’t know about OVN, Multus, or OVS—it just thinks it has a NIC. Behind the curtain, OVN is doing NAT, overlay encapsulation (Geneve), or VLAN bridging depending on your network config.  </p>
+<h2 id="nodenetworkconfigurationpolicy-examples">NodeNetworkConfigurationPolicy Examples</h2>
+<p>This is just for setting up your bonds. </p>
+<details>
+<summary>2-eth-bond-lacp-vlan</summary>
+
+<pre><code class="language-yaml">apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: 2-eth-bond-lacp-vlan
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: &lt;hostname&gt;
+  desiredState:
+    interfaces:
+      - name: &lt;devicename&gt;
+        type: ethernet
+        state: up
+        mac-address: &lt;macaddress&gt;
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+      - name: &lt;devicename2&gt;
+        type: ethernet
+        state: up
+        mac-address: &lt;macaddress2&gt;
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+      - name: bond1
+        type: bond
+        state: up
+        link-aggregation:
+          mode: 802.3ad
+          port:
+            - &lt;devicename&gt;
+            - &lt;devicename2&gt;
+          options:
+            miimon: &quot;100&quot;
+            lacp_rate: fast
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+      - name: bond1.&lt;vlanid&gt;
+        type: vlan
+        state: up
+        vlan:
+          base-iface: bond1
+          id: &lt;vlanid&gt;
+        ipv4:
+          enabled: true
+          address:
+            - ip: &lt;ipaddress&gt;               
+              prefix-length: &lt;prefixlength&gt; # 24
+          dhcp: false
+        ipv6:
+          enabled: false
+</code></pre>
+
+</details>
+
+<p>Another example for setting up your bonds with <code>active-backup</code>. </p>
+<details>
+<summary>2-eth-bond-active-backup-vlan</summary>
+
+<pre><code class="language-yaml">apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: 2-eth-bond-active-backup-vlan
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: &lt;hostname&gt;
+  desiredState:
+    interfaces:
+      - name: &lt;devicename&gt;
+        type: ethernet
+        state: up
+        mac-address: &lt;macaddress&gt;
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+      - name: &lt;devicename2&gt;
+        type: ethernet
+        state: up
+        mac-address: &lt;macaddress2&gt;
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+      - name: bond1
+        type: bond
+        state: up
+        link-aggregation:
+          mode: active-backup
+          port:
+            - &lt;devicename&gt;
+            - &lt;devicename2&gt;
+          options:
+            miimon: '100'
+            primary: &lt;devicename&gt;
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+      - name: bond1.&lt;vlanid&gt;
+        type: vlan
+        state: up
+        vlan:
+          base-iface: bond1
+          id: &lt;vlanid&gt;
+        ipv4:
+          enabled: true
+          address:
+            - ip: &lt;ipaddress&gt;               
+              prefix-length: &lt;prefixlength&gt; # 24
+          dhcp: false
+        ipv6:
+          enabled: false
+</code></pre>
+
+</details>
+
+<p>This is for when you want to create a trunk all the way to the OpenShift SDN.</p>
+<details>
+<summary>ovs-bridge-trunk-nncp</summary>
+<p>This example assumes you have an existing `bond1` on each of your worker nodes. One of the good things about using bonded connections is that if your device names are not consistent across your hardware, you have the ability to obfuscate the differences and name the bonds all the same, thus your additional configurations can be applied to larger groupings of hardware. </p>
+
+<pre><code class="language-yaml">apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: ovs-bridge-trunk-nncp
+spec:
+  nodeSelector:
+    node-role.kubernetes.io/worker: &quot;&quot;
+  desiredState:
+    interfaces:
+      - name: ovs-bridge-trunk
+        type: ovs-bridge
+        state: up
+        bridge:
+          port:
+            - name: bond1
+          allow-extra-patch-ports: true
+          options:
+            stp: false # DO NOT ENABLE STP unless you know what you are doing!
+    ovn:
+      bridge-mappings:
+        - localnet: localnet-bridge-trunk
+          bridge: ovs-bridge-trunk
+          state: present
+</code></pre>
+
+</details>
+
+<h2 id="clusteruserdefinednetwork">ClusterUserDefinedNetwork</h2>
+<p>Once you have your NNCPs in place and your underlays are created, now you need to take it that last mile to the namespaces. </p>
+<details>
+<summary>cudn-with-ipam</summary>
+<p>This example assumes you have an existing ovn bridge mapping for a localnet connection called localnet-bridge-trunk.</p>
+
+<pre><code class="language-yaml">apiVersion: k8s.ovn.org/v1
+kind: ClusterUserDefinedNetwork
+metadata:
+ name: cudn-with-ipam
+spec:
+  namespaceSelector:
+    matchExpressions:
+      - key: kubernetes.io/metadata.name
+        operator: In
+        values: [&quot;&lt;namespace&gt;&quot;, &quot;&lt;namespace2&gt;&quot;] 
+  network:
+    topology: Localnet
+    localnet:
+      role: Secondary
+      physicalNetworkName: localnet-bridge-trunk
+      vlan:
+        mode: Access
+        access:
+          id: 4
+      subnets:
+        - &quot;10.4.0.0/24&quot;
+      excludeSubnets:
+        - &quot;10.4.0.0/31&quot;       # excludes 10.4.0.0 – 10.4.0.1
+        - &quot;10.4.0.255/32&quot;     # excludes 10.4.0.255
+      ipam:
+        mode: Enabled         # DEFAULT!
+        lifecycle: Persistent
+</code></pre>
+
+</details>
+
+<details>
+<summary>cudn-no-ipam</summary>
+<p>This example assumes you have an existing ovn bridge mapping for a localnet connection called localnet-bridge-trunk.</p>
+
+<pre><code class="language-yaml">apiVersion: k8s.ovn.org/v1
+kind: ClusterUserDefinedNetwork
+metadata:
+ name: cudn-no-ipam
+spec:
+  namespaceSelector:
+    matchExpressions:
+      - key: kubernetes.io/metadata.name
+        operator: In
+        values: [&quot;&lt;namespace&gt;&quot;, &quot;&lt;namespace2&gt;&quot;] 
+  network:
+    topology: Localnet
+    localnet:
+      role: Secondary
+      physicalNetworkName: localnet-bridge-trunk
+      vlan:
+        mode: Access
+        access:
+          id: 4
+      ipam:
+        mode: Disabled
+</code></pre>
+
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+        <script src="../../extra/extra.js"></script>
+      
+    
+  </body>
+</html>
